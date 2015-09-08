@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Hq-doc : The API doc for HQ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Hq-doc</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/AdamAtCSD/hq-doc">View on GitHub</a>
+
+          <h1 id="project_title">Hq-doc</h1>
+          <h2 id="project_tagline">The API doc for HQ</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/AdamAtCSD/hq-doc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/AdamAtCSD/hq-doc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <ol>
+<li> <a href="#customer-management">Customer Management</a>
+
+<ol>
+<li> <a href="#create-a-customer">Create</a>
+</li>
+<li> <a href="#list-multiple-customers">List</a>
+</li>
+<li> <a href="#get-a-customer">Get</a>
+</li>
+<li> <a href="#update-a-customer">Update</a>
+</li>
+<li> <a href="#delete-a-customer">Delete</a>
+</li>
+</ol>
+</li>
+<li> <a href="#user-management">User Management</a>
+
+<ol>
+<li> <a href="#create-a-user">Create</a>
+</li>
+<li> <a href="#verify-a-user">Verify</a>
+</li>
+<li> <a href="#validate-a-user">Validate</a>
+</li>
+<li> <a href="#list-multiple-users">List</a>
+</li>
+<li> <a href="#get-a-user">Get</a>
+</li>
+<li> <a href="#update-a-user">Update</a>
+</li>
+<li> <a href="#delete-a-user">Delete</a>
+</li>
+<li> <a href="#password-reset">Password Reset</a>
+</li>
+<li> <a href="#password-clear">Password Clear</a>
+</li>
+</ol>
+</li>
+<li> <a href="#role-management">Role Management</a>
+
+<ol>
+<li> <a href="#create-a-role">Create</a>
+</li>
+<li> <a href="#list-multiple-roles">List</a>
+</li>
+<li> <a href="#get-a-role">Get</a>
+</li>
+<li> <a href="#update-a-role">Update</a>
+</li>
+<li> <a href="#delete-a-role">Delete</a>
+</li>
+</ol>
+</li>
+<li> <a href="#access-management">Access Management</a>
+
+<ol>
+<li> <a href="#create-an-access">Create</a>
+</li>
+<li> <a href="#list-multiple-accesses">List</a>
+</li>
+<li> <a href="#get-an-access">Get</a>
+</li>
+<li> <a href="#update-an-access">Update</a>
+</li>
+<li> <a href="#delete-an-access">Delete</a>
+</li>
+</ol>
+</li>
+<li> <a href="#session-management">Session Management</a>
+
+<ol>
+<li> <a href="#create-a-session">Create</a>
+</li>
+<li> <a href="#create-a-session-using-sso">Create SSO</a>
+</li>
+<li> <a href="#verify-a-session">Verify</a>
+</li>
+<li> <a href="#choose-a-domain">Choose Domain</a>
+</li>
+<li> <a href="#session-activity">Activity</a>
+</li>
+<li> <a href="#session-logout">Logout</a>
+</li>
+<li> <a href="#single-sign-on">Single Sign On</a>
+</li>
+<li> <a href="#list-multiple-sessions">List</a>
+</li>
+<li> <a href="#get-a-session">Get</a>
+</li>
+<li> <a href="#delete-a-session">Delete</a>
+</li>
+</ol>
+</li>
+<li> <a href="#sms-carrier-management">SMS Carrier Management</a>
+
+<ol>
+<li> <a href="#create-a-sms-carrier">Create</a>
+</li>
+<li> <a href="#list-multiple-sms-carriers">List</a>
+</li>
+<li> <a href="#get-a-sms-carrier">Get</a>
+</li>
+<li> <a href="#update-a-sms-carrier">Update</a>
+</li>
+<li> <a href="#delete-a-sms-carrier">Delete</a>
+</li>
+</ol>
+</li>
+</ol>
+
+<p>The ClearSky Data Authentication server provides <strong>customer</strong>, <strong>user</strong>, <strong>role</strong>, <strong>access</strong>, and <strong>session</strong> management.</p>
+
+<p>Calling any of the API methods below may result in an error. All errors are represented to the user as:</p>
+
+<pre><code>{
+    "status": "error",
+    "message": [
+        "\n  Postgres error: 23505\n    duplicate key value violates unique constraint \"domain_domain_name_key\"\n  DETAIL: Key (domain_name)=(xyz.com) already exists."
+    ],
+    "code": 400
+}
+</code></pre>
+
+<h1>
+<a id="customer-management" class="anchor" href="#customer-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customer Management</h1>
+
+<p>Customers have the following database attributes. There is one preloaded customer - 'clearskydata.com'</p>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>This is the assigned customer id (unique)</td>
+</tr>
+<tr>
+<td><code>customer_name</code></td>
+<td><code>string</code></td>
+<td>The name of the customer. It must be a unique domain name like 'foo.com'</td>
+</tr>
+<tr>
+<td><code>idle_timeout</code></td>
+<td><code>integer</code></td>
+<td>The idle timeout in seconds for sessions in this domain. The default is 15 minutes (15*60)</td>
+</tr>
+<tr>
+<td><code>mgmt_app_ip</code></td>
+<td><code>inet</code></td>
+<td>The IPv4 address of the management application</td>
+</tr>
+<tr>
+<td><code>mgmt_app_port</code></td>
+<td><code>int</code></td>
+<td>The IPv4 port of the management application</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="create-a-customer" class="anchor" href="#create-a-customer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a customer</h2>
+
+<pre><code>POST /customer-new
+</code></pre>
+
+<p>This method creates a customer.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>custoer_name</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The name of the customer to add. <em>Must be unique</em>
+</td>
+</tr>
+<tr>
+<td><code>idle_timeout</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. Session timeout in seconds. Default is 15 minutes (900 seconds)</td>
+</tr>
+<tr>
+<td><code>mgmt_app_ip</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The IPv4 address of the management appliance</td>
+</tr>
+<tr>
+<td><code>mgmt_app_port</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. The IPv4 port of the managment appliance</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a new domain object. For example:
+    {
+        "mgmt_app_ip": null,
+        "idle_timeout": 1000,
+        "mgmt_app_port": null,
+        "customer_id": 2,
+        "customer_name": "testing.com"
+    }</p>
+
+<h2>
+<a id="list-mutliple-customers" class="anchor" href="#list-mutliple-customers" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple customers</h2>
+
+<pre><code>GET /customers
+</code></pre>
+
+<p>This method allows you to select all customers (no parameters) or to select specific customers based on search criteria.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. This is a posix-style regular expression that is used to find the matching customer</td>
+</tr>
+</tbody>
+</table>
+
+<p>A list of matching customers is returned. Each entry in the list gives a <code>customer_id</code> and a <code>customer_name</code>.
+The following result used a name_match = ^c.*$</p>
+
+<pre><code>[
+    {
+        "customer_id": 1,
+        "customer_name": "clearskydata.com"
+    },
+    {
+        "customer_id": 3,
+        "customer_name": "cars.com"
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-a-customer" class="anchor" href="#get-a-customer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a customer</h2>
+
+<pre><code>GET /customer-&lt;customer_id&gt;
+</code></pre>
+
+<p>Get a customer (by <code>customer_id</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The customer id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a customer object. For example:</p>
+
+<pre><code>{
+    "customer_name": "xyz.com",
+    "customer_id": 2,
+    "idle_timeout": 1234,
+    "mgmt_app_ip": null,
+    "mgmt_app_port": null,
+
+}
+</code></pre>
+
+<h2>
+<a id="update-a-customer" class="anchor" href="#update-a-customer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update a customer</h2>
+
+<pre><code>PUT /customer-&lt;customer-id&gt;
+</code></pre>
+
+<p>Allows changes to made to the customer.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The <code>customer id</code> to modify</td>
+</tr>
+<tr>
+<td><code>mgmt_app_url</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The url for the managment appliance</td>
+</tr>
+<tr>
+<td><code>mgmt_app_port</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. IPv4 port for managment appliance</td>
+</tr>
+<tr>
+<td><code>idle_timeout</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. Idle timeout for sessions within customer</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a customer object. For an example customer return object see <a href="#get-a-customer">Get a Customer</a></p>
+
+<h2>
+<a id="delete-a-customer" class="anchor" href="#delete-a-customer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a customer</h2>
+
+<pre><code>DELETE /customer-&lt;customer_id&gt;
+</code></pre>
+
+<p>Delete a customer (by id)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The customer id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the customer object deleted. For an example customer return object see <a href="#get-a-customer">Get a customer</a></p>
+
+<h1>
+<a id="user-management" class="anchor" href="#user-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>User Management</h1>
+
+<p>Users have the following attributes. <strong>All user creation requires a two-factor verfication</strong> except for ClearSky employees
+who are validated against LDAP database.</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>The id assigned to the user</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>string</code></td>
+<td>The user's email address</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>A (strongly) hashed password</td>
+</tr>
+<tr>
+<td><code>sms_number</code></td>
+<td><code>string</code></td>
+<td>A telephone number for sms verification</td>
+</tr>
+<tr>
+<td><code>nickname</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. This must be a unique nickname (across all users in all domains) that the user can employ when logging in rather than their email address</td>
+</tr>
+<tr>
+<td><code>user_state</code></td>
+<td>One of: <code>unverified</code>, <code>verified</code>, <code>disabled</code>
+</td>
+<td>The state of the user's record. Only <code>verified</code> sessions can log in</td>
+</tr>
+<tr>
+<td><code>two_factor_type</code></td>
+<td>One of: <code>email</code>, <code>sms</code>
+</td>
+<td>The default is <code>email</code> <em>Note: <code>sms</code> is currently unsupported</em>
+</td>
+</tr>
+<tr>
+<td><code>verified_on</code></td>
+<td><code>timestamp</code></td>
+<td>When the user was verified</td>
+</tr>
+<tr>
+<td><code>verify_code</code></td>
+<td><code>integer</code></td>
+<td>The verification code for an <code>unverified</code> user</td>
+</tr>
+<tr>
+<td><code>password_expires_at</code></td>
+<td><code>timestamp</code></td>
+<td>
+<em>Optional</em>. If specified, then the lifetime of a user's password (not currently supported)</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="create-a-user" class="anchor" href="#create-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a user</h2>
+
+<pre><code>POST /user-new
+</code></pre>
+
+<p>This method creates a new user. This method must specify the user's email address.</p>
+
+<p>Any new user is created in the <code>unverified</code> user_state, has a non-zero <code>verify_code</code> and must be subsequently
+verified (see <a href="#verify-a-user">Verify a user</a>) to get to the <code>verified</code> user_state. Once <code>verified</code> the user can
+be used to create new sessions (login)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The user's email address</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>.</td>
+</tr>
+<tr>
+<td><code>two_factor_type</code></td>
+<td>One of <code>email</code>, <code>sms</code>
+</td>
+<td>
+<em>Optional</em>. The default is <code>email</code> <em>Note: <code>sms</code> is currently unsupported</em>
+</td>
+</tr>
+<tr>
+<td><code>sms_number</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. A telephone number for sms verification - must also specify <code>sms_carrier_id</code>
+</td>
+</tr>
+<tr>
+<td><code>sms_carrier_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. The SMS carrier for the telephone number - must also specify <code>sms_number</code>
+</td>
+</tr>
+<tr>
+<td><code>nickname</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. This must be a unique nickname (across all users in all domains) that the user can employ when logging in rather than their email address</td>
+</tr>
+<tr>
+<td><code>full_name</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The name of the individual. This name <strong>does not</strong> have to be <em>unique across all users</em>.</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a new user object. For example:</p>
+
+<pre><code>{
+    "sms_number": null,
+    "user_id": 3,
+    "password_expires_at": null,
+    "two_factor_type": "email",
+    "nickname": "Foo",
+    "verify_code": 552459,
+    "user_state": "unverified",
+    "sms_carrier_id": null,
+    "email": "foo@xyz.com",
+    "verified_on": null,
+    "full_name": null
+}
+</code></pre>
+
+<h2>
+<a id="verify-a-user" class="anchor" href="#verify-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Verify a user</h2>
+
+<pre><code>PUT /user-verify
+</code></pre>
+
+<p>Verify a user record. This uses the verification code (<code>verify_code</code>) generated when the user record was <a href="#create-a-user">created</a></p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_name</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The name of the user to verify - this can be the email or the nickname for the user</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The user's password</td>
+</tr>
+<tr>
+<td><code>verify_code</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The verification code</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns the verified user object. For example:</p>
+
+<pre><code>{
+    "sms_number": null,
+    "user_id": 3,
+    "password_expires_at": null,
+    "two_factor_type": "email",
+    "nickname": "Foo",
+    "verify_code": 0,
+    "user_state": "unverified",
+    "sms_carrier_id": null,
+    "email": "foo@xyz.com",
+    "full_name": null,
+    "verified_on": "2015-03-14 14:31:25.881635"
+}
+</code></pre>
+
+<h2>
+<a id="validate-a-user" class="anchor" href="#validate-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validate a user</h2>
+
+<pre><code>GET /user-validate
+</code></pre>
+
+<p>Validate a user record. Simply validate the credentials and returns the role within the customer specified. The customer id must exist and there must be a valid access record for the user within the customer.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_name</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The name of the user to verify - this can be the email or the nickname for the user</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The user's password</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The customer scope to check the user within</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a validated object replete with role information. <em>NOTE:</em> no session is established.</p>
+
+<pre><code>{
+    "password_expires_at": null,
+    "user_verify_code": 0,
+    "was_reset": null,
+    "customer_name": "clearskydata.com",
+    "sms_number": null,
+    "user_id": 2,
+    "user_state": "verified",
+    "support_cases": "modify",
+    "role_id": 1,
+    "billing_usage": "read",
+    "storage_alerts": "modify",
+    "customer_id": 1,
+    "email": "foo@xyz.com",
+    "storage_charts": "read",
+    "idle_timeout": 900,
+    "role_name": "System Admin",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "nickname": "Foo",
+    "mgmt_app_url": "mgmt.clearsky-data.net",
+    "verified_on": "2015-07-01 12:00:31.093402",
+    "storage_l2_config": "modify",
+    "admin_center": "modify",
+    "two_factor_type": "email",
+    "billing_invoices": "read",
+    "storage_config": "modify",
+    "access_id": 2,
+    "mgmt_app_port": 443,
+    "sms_carrier_id": null,
+    "sfdc_info": "modify",
+    "full_name": null
+}
+</code></pre>
+
+<h2>
+<a id="list-mutliple-users" class="anchor" href="#list-mutliple-users" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple users</h2>
+
+<pre><code>GET /users
+</code></pre>
+
+<p>This method can view mutliple users from the database. The search can be controlled by search parameters</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. Posix regular expression to match against emails</td>
+</tr>
+<tr>
+<td><code>nickname_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. Posix regular expression to match nickname</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a list of matching users:</p>
+
+<pre><code>[
+    {
+        "user_id": 1,
+        "email": "foo@xyz.com"
+    },
+    {
+        "user_id": 3,
+        "email": "foobar@xyz.com"
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-a-user" class="anchor" href="#get-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a user</h2>
+
+<pre><code>GET /user-&lt;user_id&gt;
+</code></pre>
+
+<p>Get a user (by <code>user_id</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The user id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>A user object. For example:</p>
+
+<pre><code>{
+    "sms_number": null,
+    "user_id": 1,
+    "password_expires_at": null,
+    "two_factor_pref": "email",
+    "email": "foo@xyz.com",
+    "state": "verified",
+    "nickname": "Foo",
+    "domain_id": 2,
+    "verified_on": "2015-03-13 13:33:28.191980",
+    "full_name": "Bowser McRuff"
+}
+</code></pre>
+
+<h2>
+<a id="update-a-user" class="anchor" href="#update-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update a user</h2>
+
+<pre><code>PUT /user-&lt;user-id&gt;
+</code></pre>
+
+<p>Allows changes to made to a user.</p>
+
+<p>Changing a password requires that both the <code>password</code> and <code>old_password</code> parameters must be specified</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The <code>user_id</code> to to modify</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. If changing password, then the new password.</td>
+</tr>
+<tr>
+<td><code>old_password</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The original password - must match to set the user's new <code>password</code>
+</td>
+</tr>
+<tr>
+<td><code>sms_number</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The <code>sms</code> number for the user</td>
+</tr>
+<tr>
+<td><code>two_factor_type</code></td>
+<td>One of: <code>email</code>, <code>sms</code>
+</td>
+<td>
+<em>Optional</em>.</td>
+</tr>
+<tr>
+<td><code>nickname</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. This must be a unique nickname (across all users in all domains)</td>
+</tr>
+<tr>
+<td><code>password_expires_at</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The time/date the password will expire</td>
+</tr>
+<tr>
+<td><code>full_name</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The name of the individual. This name <strong>does not</strong> have to be <em>unique across all users</em>.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a user object. For an example user return object see <a href="#get-a-user">Get a user</a></p>
+
+<h2>
+<a id="delete-a-user" class="anchor" href="#delete-a-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a user</h2>
+
+<pre><code>DELETE /user-&lt;user_id&gt;
+</code></pre>
+
+<p>Delete a user (by id)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The user id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the user object that was deleted. For an example user return object see <a href="#get-a-user">Get a user</a></p>
+
+<h2>
+<a id="password-reset" class="anchor" href="#password-reset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Password reset</h2>
+
+<pre><code>PUT /user-&lt;user-id&gt;/password-reset
+</code></pre>
+
+<p>Reset a user's password. The overwritten password is saved to the old password list if the reset password
+is itself not a reset password: If two resets are done in a row, the first reset password wlll not be saved
+away as a user's password.</p>
+
+<p>The password reset will result in the account being placed back into the 'unverified' state and a verification
+code is generated. The user needs to go through the typical verification process.</p>
+
+<p>An email is sent to the user's email address with the user account verification code.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The user id to reset the password of</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The temporary password to set in the re</td>
+</tr>
+</tbody>
+</table>
+
+<p>A user record identical to the record returned from create is sent back - an unverified user record complete
+with verification code.</p>
+
+<h2>
+<a id="password-clear" class="anchor" href="#password-clear" aria-hidden="true"><span class="octicon octicon-link"></span></a>Password clear</h2>
+
+<pre><code>PUT /users/password-clear
+</code></pre>
+
+<p>The clears the last N passwords and/or passwords that are in the database since a particular date.</p>
+
+<p><strong>NOTE:</strong> all old password for all users is changed by this function. This is system-wide policy
+enforced by the caller. No old passwords are ever automatically purged by the authentication server.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keep</code></td>
+<td><code>integer</code></td>
+<td>The maximum number of old_passwords to retain</td>
+</tr>
+<tr>
+<td><code>keep_since</code></td>
+<td><code>string</code></td>
+<td>The oldest date to retain passwords since. This is in postgresql acceptable date formats (see <a href="http://www.postgresql.org/docs/9.3/static/datatype-datetime.html#DATATYPE-DATETIME-DATE-TABLE">Postgres date input formats</a>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns {'cleared': 'ok'} on success, an error otherwise</p>
+
+<h1>
+<a id="role-management" class="anchor" href="#role-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Role Management</h1>
+
+<p>A role is a collection of permissions to access particular areas of the ClearSky product</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>The id assigned to the role</td>
+</tr>
+<tr>
+<td><code>role_name</code></td>
+<td><code>string</code></td>
+<td>The name of the role (must be unique)</td>
+</tr>
+<tr>
+<td><code>admin_center</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_l2_config</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_config</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_charts</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_alerts</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>billing_invoices</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>billing_usage</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_docs</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_downloads</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_cases</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>sfdc_info</code></td>
+<td><code>permission_enum</code></td>
+<td>one of 'no_access', 'read', or 'modify'</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following table are the databases predefined roles:</p>
+
+<table>
+<thead>
+<tr>
+<th>role_id</th>
+<th>role_name</th>
+<th>admin_center</th>
+<th>storage_l2_config</th>
+<th>storage_config</th>
+<th>storage_charts</th>
+<th>storage_alerts</th>
+<th>billing_invoices</th>
+<th>billing_usage</th>
+<th>support_docs</th>
+<th>support_downloads</th>
+<th>support_cases</th>
+<th>sfdc_info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>System Admin</td>
+<td>modify</td>
+<td>modify</td>
+<td>modify</td>
+<td>read</td>
+<td>modify</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>modify</td>
+<td>modify</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Storage Admin</td>
+<td>read</td>
+<td>read</td>
+<td>modify</td>
+<td>read</td>
+<td>modify</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>read</td>
+<td>read</td>
+<td>modify</td>
+<td>read</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Finance</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Support Level 1</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>modify</td>
+<td>read</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Guest</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>no_access</td>
+<td>read</td>
+<td>read</td>
+<td>modify</td>
+<td>no_access</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="create-a-role" class="anchor" href="#create-a-role" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a role</h2>
+
+<pre><code>POST /role-new
+</code></pre>
+
+<p>This method creates a new role. Assign the various permissions to the role</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rolename</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong> The name of the role (must be unique)</td>
+</tr>
+<tr>
+<td><code>admin_center</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>storage_l2_config</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>storage_config</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>storage_charts</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>storage_alerts</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>billing_invoices</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>billing_usage</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>support_docs</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>support_downloads</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>support_cases</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+<tr>
+<td><code>sfdc_info</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'. Defaults to 'no_access'</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a new role object. For example:</p>
+
+<pre><code>{
+    "storage_charts": "no_access",
+    "storage_l2_config": "no_access",
+    "admin_center": "no_access",
+    "support_cases": "modify",
+    "billing_invoices": "no_access",
+    "role_id": 7,
+    "storage_config": "no_access",
+    "role_name": "Fake Role",
+    "billing_usage": "read",
+    "storage_alerts": "no_access",
+    "support_docs": "no_access",
+    "support_downloads": "no_access",
+    "sfdc_info": "no_access"
+}
+</code></pre>
+
+<h2>
+<a id="list-mutliple-roles" class="anchor" href="#list-mutliple-roles" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple roles</h2>
+
+<pre><code>GET /roles
+</code></pre>
+
+<p>This method can retrieve all roles from the database. Specifying search parameters can narrow the list returned.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>.  Limit the return to roles that match <code>name_match</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a list of matching roles using a name_match of ^.<em>Admin.</em>$</p>
+
+<pre><code>[
+    {
+        "storage_charts": "read",
+        "storage_l2_config": "modify",
+        "admin_center": "modify",
+        "support_cases": "modify",
+        "billing_invoices": "read",
+        "role_id": 1,
+        "storage_config": "modify",
+        "role_name": "System Admin",
+        "billing_usage": "read",
+        "storage_alerts": "modify",
+        "support_docs": "read",
+        "support_downloads": "read",
+        "sfdc_info": "modify"
+    },
+    {
+        "storage_charts": "read",
+        "storage_l2_config": "read",
+        "admin_center": "read",
+        "support_cases": "modify",
+        "billing_invoices": "no_access",
+        "role_id": 2,
+        "storage_config": "modify",
+        "role_name": "Storage Admin",
+        "billing_usage": "no_access",
+        "storage_alerts": "modify",
+        "support_docs": "read",
+        "support_downloads": "read",
+        "sfdc_info": "read"
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-a-role" class="anchor" href="#get-a-role" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a role</h2>
+
+<pre><code>GET /role-&lt;role_id&gt;
+</code></pre>
+
+<p>Get a role (by <code>role_id</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The role id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>A role object. For example:</p>
+
+<pre><code>{
+    "storage_charts": "read",
+    "storage_l2_config": "read",
+    "admin_center": "read",
+    "support_cases": "modify",
+    "billing_invoices": "read",
+    "role_id": 4,
+    "storage_config": "read",
+    "role_name": "CSD Level 1",
+    "billing_usage": "read",
+    "storage_alerts": "read",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "sfdc_info": "read"
+}
+</code></pre>
+
+<h2>
+<a id="update-a-role" class="anchor" href="#update-a-role" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update a role</h2>
+
+<pre><code>PUT /role-&lt;role-id&gt;
+</code></pre>
+
+<p>Allows changes to made to a role. Change the permissions or role name</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The role id to get</td>
+</tr>
+<tr>
+<td><code>rolename</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> The new name for the role (must be unique)</td>
+</tr>
+<tr>
+<td><code>admin_center</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_l2_config</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_config</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_charts</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>storage_alerts</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>billing_invoices</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>billing_usage</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_docs</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_downloads</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>support_cases</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+<tr>
+<td><code>sfdc_info</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Optional</strong> One of 'no_access', 'read', or 'modify'</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a role object. For an example role return object see <a href="#get-a-role">Get a role</a></p>
+
+<h2>
+<a id="delete-a-role" class="anchor" href="#delete-a-role" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a role</h2>
+
+<pre><code>DELETE /role-&lt;role_id&gt;
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The role id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the role object that was deleted. For an example role return object see <a href="#get-a-role">Get a role</a></p>
+
+<h1>
+<a id="access-management" class="anchor" href="#access-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Access Management</h1>
+
+<p>An access record defines a user's role within a customer. This typcially singular, meaning that a
+user has only one access record associating them with their customer. However, there is the need
+for some users to have access to multiple customers. Take, for example, a ClearSky support engineer
+who needs to help a customer address an issue.</p>
+
+<p>An access record is <strong>required</strong> to create a new session. </p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_id</code></td>
+<td><code>integer</code></td>
+<td>The id assigned to the access</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>The user id for this access</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>The customer id assigned to the access</td>
+</tr>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>The role id for the user at the customer</td>
+</tr>
+</tbody>
+</table>
+
+<p>All accesses must have a unique (<code>user_id</code>, <code>customer_id</code>).</p>
+
+<h2>
+<a id="create-an-access" class="anchor" href="#create-an-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create an access</h2>
+
+<pre><code>POST /access-new
+</code></pre>
+
+<p>This method creates a new access. A user may have on a single role within the context
+of the customer specified. However, a user may be assigned to any number (0 to n)
+customers.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong> The user for the access</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong> The customerfor the access</td>
+</tr>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong> The role for the access</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>{
+    "role_id": 5,
+    "customer_id": 3,
+    "user_id": 1,
+    "access_id": 4
+}
+</code></pre>
+
+<h2>
+<a id="list-mutliple-accesses" class="anchor" href="#list-mutliple-accesses" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple accesses</h2>
+
+<pre><code>GET /accesses
+</code></pre>
+
+<p>This method can retrieve all accesses from the database. Specifying search parameters can narrow the list returned.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. Limit the return to accesses that match the customer</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>.  Limit the return to accesses that match user</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>[
+    {
+        "role_id": 5,
+        "customer_id": 1,
+        "user_id": 1,
+        "access_id": 1
+    },
+    {
+        "role_id": 4,
+        "customer_id": 1,
+        "user_id": 2,
+        "access_id": 2
+    },
+    {
+        "role_id": 2,
+        "customer_id": 3,
+        "user_id": 1,
+        "access_id": 4
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-an-access" class="anchor" href="#get-an-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an access</h2>
+
+<pre><code>GET /access-&lt;access_id&gt;
+</code></pre>
+
+<p>Get an access (by <code>access_id</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The access id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>an access object. For example:
+    {
+        "role_id": 5,
+        "customer_id": 1,
+        "user_id": 2,
+        "access_id": 2
+    }</p>
+
+<h2>
+<a id="update-an-access" class="anchor" href="#update-an-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update an access</h2>
+
+<pre><code>PUT /access-&lt;access-id&gt;
+</code></pre>
+
+<p>Allows changes to role within an access.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong> The access to update</td>
+</tr>
+<tr>
+<td><code>role_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em> The new role ofr the user within the customer. Not really optional since this is the only thing to change</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns an access object. For an example access return object see <a href="#get-an-access">Get an access</a></p>
+
+<h2>
+<a id="delete-an-access" class="anchor" href="#delete-an-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete an access</h2>
+
+<pre><code>DELETE /access-&lt;access_id&gt;
+</code></pre>
+
+<p>The default access (an access who's <code>domain_id</code> is the same as the user record's <code>domain_id</code>) may not be deleted</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The access id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the access object that was deleted. For an example access return object see <a href="#get-an-access">Get an access</a></p>
+
+<h1>
+<a id="session-management" class="anchor" href="#session-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Session Management</h1>
+
+<p>Sessions must be authenticated. They have an expiration time set by the customer chosen.</p>
+
+<p>A session has the states:</p>
+
+<ul>
+<li>need_second_factor - a verification code has been sent the user via their <code>email</code> or <code>sms</code>
+</li>
+<li>choose_customer - a user has multiple access records. The session needs to be associated with a particular customer.</li>
+<li>active - there is an active session: a user has a role within the domain</li>
+<li>expired - the session has timed out and should be denied access to all things</li>
+<li>logged_out - the session has been logged out and should be denied access to all things</li>
+</ul>
+
+<p>Two factor authentication is controlled by the creator of a new session.</p>
+
+<p>Sessions have the following attributes.</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>integer</code></td>
+<td>The id assigned to the session</td>
+</tr>
+<tr>
+<td><code>access_id</code></td>
+<td><code>integer</code></td>
+<td>The access for the session</td>
+</tr>
+<tr>
+<td><code>session_state</code></td>
+<td>One of: <code>need_second_factor</code>,<code>choose_customer</code>, <code>active</code>, <code>expired</code>, <code>logged_out</code>
+</td>
+<td>The state of the session</td>
+</tr>
+<tr>
+<td><code>last_activity</code></td>
+<td><code>timestamp</code></td>
+<td>The time of the last detected activity</td>
+</tr>
+<tr>
+<td><code>times_out_at</code></td>
+<td><code>timestamp</code></td>
+<td>The session expiry time</td>
+</tr>
+<tr>
+<td><code>logged_out_at</code></td>
+<td><code>timestamp</code></td>
+<td>The time the session was logged out</td>
+</tr>
+<tr>
+<td><code>verify_code</code></td>
+<td><code>integer</code></td>
+<td>The verification code</td>
+</tr>
+</tbody>
+</table>
+
+<p>Creating a session is the way a user logs in.</p>
+
+<h2>
+<a id="create-a-session" class="anchor" href="#create-a-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a session</h2>
+
+<pre><code>POST /session-new
+</code></pre>
+
+<p>This method creates a new session == log in. If the user's home domain specifies two-factor authentication, then an email (or sms, when supported) is sent to the user with a randomly generated 6 digit code. That code is then used to <a href="#verify-a-session">verify the session</a> .</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_name</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The name of the user to verify - this can be the email or the nickname for the user</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The user's password</td>
+</tr>
+<tr>
+<td><code>need_second_factor</code></td>
+<td><code>bool</code></td>
+<td>
+<em>Optional</em>. If true then send out a second factor 6 digit code to the user's choosen <code>two_factor_type</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a new session object. For example, this is a return when <code>need_second_factor</code> is true :</p>
+
+<pre><code>{
+    "session_state": "need_second_factor",
+    "logged_out_at": null,
+    "times_out_at": "2015-04-10 11:23:26.094399",
+    "session_user_id": 1,
+    "session_id": 3,
+    "last_activity": "2015-04-10 11:13:26.094399",
+    "verify_code": 633796,
+    "access_id": null
+}
+</code></pre>
+
+<p>For a session that presents multiple customers, you get:
+    {
+        "customers": [
+            {
+                "mgmt_app_ip": null,
+                "user_id": 1,
+                "two_factor": false,
+                "role_id": 5,
+                "idle_timeout": 3600,
+                "access_id": 1,
+                "mgmt_app_port": null,
+                "customer_id": 1,
+                "customer_name": "clearskydata.com"
+            },
+            {
+                "mgmt_app_ip": null,
+                "user_id": 1,
+                "two_factor": true,
+                "role_id": 5,
+                "idle_timeout": 1234,
+                "access_id": 4,
+                "mgmt_app_port": null,
+                "customer_id": 3,
+                "customer_name": "cars.com"
+            }
+        ],
+        "session_state": "choose_customer",
+        "logged_out_at": null,
+        "times_out_at": "2015-04-10 12:51:30.120373",
+        "session_user_id": 1,
+        "session_id": 10,
+        "last_activity": "2015-04-10 12:41:30.120373",
+        "verify_code": null,
+        "access_id": null
+    }</p>
+
+<p>The session must be verified before <code>times_out_at</code> time has been reached, otherwise the session will be marked as <code>expired</code> and the user will have to create a new session.</p>
+
+<h2>
+<a id="create-a-session-using-sso" class="anchor" href="#create-a-session-using-sso" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a session using SSO</h2>
+
+<pre><code>POST /session-new-sso
+</code></pre>
+
+<p>This is the method to call with the token returned from <a href="#single-sign-on">Single Sign On</a>. The token as returned is already URL-encoded and can just be passed back as a POST parameter</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sso_token</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The SSO token for the signon</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns an existing session - exactly like an active session (see <a href="#session-activity">Session Activity</a>) since this sign on is considered session activity.</p>
+
+<pre><code>{
+    "times_out_at": "2015-04-10 12:55:41.945946",
+    "session_user_id": 1,
+    "last_activity": "2015-04-10 12:35:07.945946",
+    "customer_name": "cars.com",
+    "session_state": "active",
+    "user_id": 1,
+    "user_state": "unverified",
+    "support_cases": "modify",
+    "sms_number": null,
+    "role_id": 5,
+    "password_expires_at": null,
+    "billing_usage": "read",
+    "storage_alerts": "modify",
+    "customer_id": 3,
+    "email": "tuser@clearskydata.com",
+    "storage_charts": "read",
+    "logged_out_at": null,
+    "idle_timeout": 1234,
+    "role_name": "CSD Level 2",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "nickname": null,
+    "verified_on": null,
+    "mgmt_app_ip": null,
+    "storage_l2_config": "modify",
+    "admin_center": "modify",
+    "two_factor_type": "email",
+    "two_factor": true,
+    "billing_invoices": "read",
+    "storage_config": "modify",
+    "session_id": 5,
+    "access_id": 4,
+    "mgmt_app_port": null,
+    "sms_carrier_id": null,
+    "sfdc_info": "read"
+}
+</code></pre>
+
+<h2>
+<a id="verify-a-session" class="anchor" href="#verify-a-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Verify a session</h2>
+
+<pre><code>PUT /session-&lt;session-id&gt;/verify
+</code></pre>
+
+<p>The session must be in <code>need_2nd_factor</code> state, otherwise an error is returned.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>verify_code</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The verification code</td>
+</tr>
+</tbody>
+</table>
+
+<p>The result of the verification is a session object. The state will either be set to <code>active</code> if the user only has a single role, or <code>choose_customer</code> if the user needs to <a href="#choose-a-customer">choose a customer</a></p>
+
+<pre><code>{
+    "times_out_at": "2015-04-10 13:04:08.415424",
+    "session_user_id": 3,
+    "last_activity": "2015-04-10 12:47:28.415424",
+    "customer_name": "testing.com",
+    "session_state": "active",
+    "user_id": 3,
+    "user_state": "verified",
+    "support_cases": "modify",
+    "sms_number": null,
+    "role_id": 6,
+    "password_expires_at": null,
+    "billing_usage": "no_access",
+    "storage_alerts": "no_access",
+    "customer_id": 2,
+    "email": "foo@xyz.com",
+    "storage_charts": "no_access",
+    "logged_out_at": null,
+    "idle_timeout": 1000,
+    "role_name": "Qualified Prospect",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "nickname": "Foo",
+    "verified_on": "2015-04-09 23:10:00.491264",
+    "mgmt_app_ip": null,
+    "storage_l2_config": "no_access",
+    "admin_center": "no_access",
+    "two_factor_type": "email",
+    "two_factor": true,
+    "billing_invoices": "no_access",
+    "storage_config": "no_access",
+    "session_id": 12,
+    "access_id": 5,
+    "mgmt_app_port": null,
+    "sms_carrier_id": null,
+    "sfdc_info": "no_access"
+}
+
+
+
+{
+    "user_id": 1,
+    "times_out_at": "2015-03-14 19:40:54.917120",
+    "verify_code": 0,
+    "session_id": 7,
+    "last_activity": "2015-03-14 17:10:54.917120",
+    "state": "active",
+    "logged_out_at": null,
+    "domain_id": 2
+}
+</code></pre>
+
+<h2>
+<a id="choose-a-customer" class="anchor" href="#choose-a-customer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Choose a customer</h2>
+
+<pre><code>PUT /session-&lt;session-id&gt;/choose
+</code></pre>
+
+<p>The session is being placed into customer</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The customer to choose</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a session object.</p>
+
+<h2>
+<a id="session-activity" class="anchor" href="#session-activity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Session Activity</h2>
+
+<pre><code>PUT /session-&lt;session-id&gt;/active
+</code></pre>
+
+<p>This checks to see if the session is active. If the <code>interactive</code> parameter is false, the <code>last_activity</code> and <code>times_out_at</code> for the session are not reset. If <code>interactive</code> is true or not present, then <code>last_activity</code> is set to the current time and <code>times_out_at</code> is set to the <code>last_activity</code> + the <code>domain_id idle_timeout</code>.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>interactive</code></td>
+<td><code>bool</code></td>
+<td>
+<em>Optional</em>. False for no update of timers</td>
+</tr>
+</tbody>
+</table>
+
+<p>The session object is returned. All fields are fetched from the database and thereby may be updated by other users (for example, the role might have changed or a privilege in the role might morph)</p>
+
+<pre><code>{
+    "times_out_at": "2015-04-10 13:05:55.686868",
+    "session_user_id": 3,
+    "last_activity": "2015-04-10 12:49:15.686868",
+    "customer_name": "testing.com",
+    "session_state": "active",
+    "user_id": 3,
+    "user_state": "verified",
+    "support_cases": "modify",
+    "sms_number": null,
+    "role_id": 6,
+    "password_expires_at": null,
+    "billing_usage": "no_access",
+    "storage_alerts": "no_access",
+    "customer_id": 2,
+    "email": "foo@xyz.com",
+    "storage_charts": "no_access",
+    "logged_out_at": null,
+    "idle_timeout": 1000,
+    "role_name": "Qualified Prospect",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "nickname": "Foo",
+    "verified_on": "2015-04-09 23:10:00.491264",
+    "mgmt_app_ip": null,
+    "storage_l2_config": "no_access",
+    "admin_center": "no_access",
+    "two_factor_type": "email",
+    "two_factor": true,
+    "billing_invoices": "no_access",
+    "storage_config": "no_access",
+    "session_id": 12,
+    "access_id": 5,
+    "mgmt_app_port": null,
+    "sms_carrier_id": null,
+    "sfdc_info": "no_access"
+}
+</code></pre>
+
+<h2>
+<a id="session-logout" class="anchor" href="#session-logout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Session Logout</h2>
+
+<pre><code>PUT /session-&lt;session-id&gt;/logout
+</code></pre>
+
+<p>Logout a session. The <code>logged_out_at</code> is set to the time of the logout and the session state is set to <code>logged_out</code>.</p>
+
+<pre><code>{
+    "session_state": "logged_out",
+    "logged_out_at": "2015-04-10 12:51:41.221414",
+    "times_out_at": "2015-04-10 12:55:41.945946",
+    "session_user_id": 1,
+    "session_id": 5,
+    "last_activity": "2015-04-10 12:35:07.945946",
+    "verify_code": 0,
+    "access_id": 4
+}
+</code></pre>
+
+<h2>
+<a id="single-sign-on" class="anchor" href="#single-sign-on" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single Sign On</h2>
+
+<pre><code>PUT /session-&lt;session-id&gt;/sso
+</code></pre>
+
+<p>Get an sso token to use for single sign on. The token is passed back to the authentication server doing a single sign-on. The session must be in the <code>active</code> state.</p>
+
+<p>The url-encoded token is sent back to the caller. It can be large. It is the result of signed digest that is private to the authentication server. This is a "one-shot" token; Upon it's first use it is invalidated.</p>
+
+<pre><code>{
+    "sso_token": "u0Ja4PJ2DuzLUBTgxqRw171A3MXhe8O9LNav1Q7u73hu4L%2B5zdnuseAKCHgbgW5A02utt9n23OGOlZQ8LNb92XV1jFdAikcq4Vbuy%2Byk%2BIsV0RUTenNhke440gsSHnCpBSmkXRS4MdPM8wEFi16ARo9vzGhLSKEOlk017uH4KfHpiAlAw%2BNZrbabMzdbZE2XTlxPwhzHwZ1XcVt7GIiRVNkB0zWUSlmkVgoSYHYp17Lfqj8Nl0i5HvSZV0yp70J6uowY2U3ecd919gIcJB0S70Q6Mv7PGrosanXK2kELwpxQqXnWkngsBLwnaDmg17kY9HMufe4jBq8At%2BB4EDTalA%3D%3D"
+}
+</code></pre>
+
+<h2>
+<a id="list-mutliple-sessions" class="anchor" href="#list-mutliple-sessions" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple sessions</h2>
+
+<p>This method can retrieve all sessions from the database. Specifying search parameters can narrow the list returned. If you specify
+the customer_id parameter then the output contains the role, customer and user information. All other queries return a stripped
+down session record</p>
+
+<pre><code>GET /sessions
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>. Limit the return to sessions that match customer (more expansive output)</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>integer</code></td>
+<td>
+<em>Optional</em>.  Limit the return to sessions that match user</td>
+</tr>
+<tr>
+<td><code>session_state</code></td>
+<td>One of: <code>need_2nd_factor</code>,<code>choose_domain</code>, <code>active</code>, <code>expired</code>, <code>logged_out</code>
+</td>
+<td>
+<em>Optional</em>. The state of the session</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a list of matching sessions - this used a customer_id argument of 2.</p>
+
+<pre><code>[
+    {
+        "times_out_at": "2015-04-10 12:05:26.093008",
+        "session_user_id": 3,
+        "last_activity": "2015-04-10 11:48:46.093008",
+        "session_id": 4,
+        "customer_name": "testing.com",
+        "session_state": "expired",
+        "user_id": 3,
+        "user_state": "verified",
+        "role_id": 6,
+        "password_expires_at": null,
+        "customer_id": 2,
+        "email": "foo@xyz.com",
+        "logged_out_at": null,
+        "idle_timeout": 1000,
+        "nickname": "Foo",
+        "verified_on": "2015-04-09 23:10:00.491264",
+        "mgmt_app_ip": null,
+        "two_factor_type": "email",
+        "two_factor": true,
+        "sms_number": null,
+        "access_id": 5,
+        "mgmt_app_port": null,
+        "sms_carrier_id": null
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-a-session" class="anchor" href="#get-a-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a session</h2>
+
+<p>Get a session (by <code>session_id</code>)</p>
+
+<pre><code>GET /session-&lt;session_id&gt;
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The session id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>A session object. For example:</p>
+
+<pre><code>{
+    "times_out_at": "2015-04-09 23:38:57.510796",
+    "session_user_id": 1,
+    "last_activity": "2015-04-09 22:38:57.510796",
+    "customer_name": "clearskydata.com",
+    "session_state": "expired",
+    "user_id": 1,
+    "user_state": "unverified",
+    "support_cases": "modify",
+    "sms_number": null,
+    "role_id": 5,
+    "password_expires_at": null,
+    "billing_usage": "read",
+    "storage_alerts": "modify",
+    "customer_id": 1,
+    "email": "tuser@clearskydata.com",
+    "storage_charts": "read",
+    "logged_out_at": null,
+    "idle_timeout": 3600,
+    "role_name": "CSD Level 2",
+    "support_docs": "read",
+    "support_downloads": "read",
+    "nickname": null,
+    "verified_on": null,
+    "mgmt_app_ip": null,
+    "storage_l2_config": "modify",
+    "admin_center": "modify",
+    "two_factor_type": "email",
+    "two_factor": false,
+    "billing_invoices": "read",
+    "storage_config": "modify",
+    "session_id": 1,
+    "access_id": 1,
+    "mgmt_app_port": null,
+    "sms_carrier_id": null,
+    "sfdc_info": "read"
+}
+</code></pre>
+
+<h2>
+<a id="delete-a-session" class="anchor" href="#delete-a-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a session</h2>
+
+<p>The default session (a session who's <code>domain_id</code> is the same as the user record's <code>domain_id</code>) may not be deleted</p>
+
+<pre><code>DELETE /session-&lt;session_id&gt;
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The session id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the session object that was deleted.
+    {
+        "session_state": "logged_out",
+        "logged_out_at": "2015-04-10 12:51:41.221414",
+        "times_out_at": "2015-04-10 12:55:41.945946",
+        "session_user_id": 1,
+        "session_id": 5,
+        "last_activity": "2015-04-10 12:35:07.945946",
+        "verify_code": 0,
+        "access_id": 4
+    }</p>
+
+<h1>
+<a id="sms-carrier-management" class="anchor" href="#sms-carrier-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sms Carrier Management</h1>
+
+<p>Sms_Carriers have the following attributes.</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sms_carrier_id</code></td>
+<td><code>integer</code></td>
+<td>The id assigned to the sms_carrier</td>
+</tr>
+<tr>
+<td><code>carrier_name</code></td>
+<td><code>string</code></td>
+<td>The name (to display) for the carrier</td>
+</tr>
+<tr>
+<td><code>email_gateway</code></td>
+<td><code>string</code></td>
+<td>The sms_carrier's email gateway</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following carriers are created by default within the database. Use <a href="#get-a-sms-carrier">Get a SMS carrier</a> to find the sms_carrier_id.</p>
+
+<table>
+<thead>
+<tr>
+<th>carrier_name</th>
+<th>email_gateway</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AllTel</td>
+<td>text.wireless.alltel.com</td>
+</tr>
+<tr>
+<td>AT&amp;T</td>
+<td>txt.att.net</td>
+</tr>
+<tr>
+<td>Boost Mobile</td>
+<td>myboostmobile.com</td>
+</tr>
+<tr>
+<td>Cricket</td>
+<td>sms.mycricket.com</td>
+</tr>
+<tr>
+<td>Sprint</td>
+<td>messaging.sprintpcs.com</td>
+</tr>
+<tr>
+<td>T-Mobile</td>
+<td>tmomail.net</td>
+</tr>
+<tr>
+<td>US Cellular</td>
+<td>email.uscc.net</td>
+</tr>
+<tr>
+<td>Verizon</td>
+<td>vtext.com</td>
+</tr>
+<tr>
+<td>Virgin Mobile</td>
+<td>vmobl.com</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="create-a-sms-carrier" class="anchor" href="#create-a-sms-carrier" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a SMS carrier</h2>
+
+<pre><code>POST /sms_carrier-new
+</code></pre>
+
+<p>This method creates a new SMS carrier.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_name</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The name of the SMS carrier</td>
+</tr>
+<tr>
+<td><code>email_gateway</code></td>
+<td><code>string</code></td>
+<td>
+<strong>Required</strong>. The SMS carrier's email address</td>
+</tr>
+</tbody>
+</table>
+
+<p>This method returns a new sms_carrier object. For example:</p>
+
+<pre><code>{
+    "carrier_name": "Sleepy the Man",
+    "sms_carrier_id": 11,
+    "email_gateway": "zzz.com"
+}
+</code></pre>
+
+<h2>
+<a id="list-mutliple-sms-carriers" class="anchor" href="#list-mutliple-sms-carriers" aria-hidden="true"><span class="octicon octicon-link"></span></a>List mutliple SMS carriers</h2>
+
+<pre><code>GET /sms_carriers
+</code></pre>
+
+<p>This method can view mutliple SMS carriers from the database. The search can be controlled by search parameters</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_name_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. Posix regular expression to match against carrier name</td>
+</tr>
+<tr>
+<td><code>email_gateway_match</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. Posix regular expression to match against email gateways</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a list of matching sms_carriers:</p>
+
+<pre><code>[
+    {
+        "carrier_name": "AllTel",
+        "sms_carrier_id": 1,
+        "email_gateway": "text.wireless.alltel.com"
+    },
+    {
+        "carrier_name": "Sprint",
+        "sms_carrier_id": 5,
+        "email_gateway": "messaging.sprintpcs.com"
+    },
+    {
+        "carrier_name": "Verizon",
+        "sms_carrier_id": 8,
+        "email_gateway": "vtext.com"
+    },
+    {
+        "carrier_name": "Virgin Mobile",
+        "sms_carrier_id": 9,
+        "email_gateway": "vmobl.com"
+    },
+    {
+        "carrier_name": "Adam",
+        "sms_carrier_id": 10,
+        "email_gateway": "xyz.com"
+    },
+    {
+        "carrier_name": "Sleepy the Man",
+        "sms_carrier_id": 11,
+        "email_gateway": "zzz.com"
+    }
+]
+</code></pre>
+
+<h2>
+<a id="get-a-sms-carrier" class="anchor" href="#get-a-sms-carrier" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a SMS carrier</h2>
+
+<pre><code>GET /sms_carrier-&lt;sms_carrier_id&gt;
+</code></pre>
+
+<p>Get a sms_carrier (by <code>sms_carrier_id</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sms_carrier_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The sms_carrier id to get</td>
+</tr>
+</tbody>
+</table>
+
+<p>A sms_carrier object. For example:</p>
+
+<pre><code>{
+    "carrier_name": "Verizon",
+    "sms_carrier_id": 8,
+    "email_gateway": "vtext.com"
+}
+</code></pre>
+
+<h2>
+<a id="update-a-sms_carrier" class="anchor" href="#update-a-sms_carrier" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update a sms_carrier</h2>
+
+<pre><code>PUT /sms_carrier-&lt;sms_carrier-id&gt;
+</code></pre>
+
+<p>Allows changes to made to a sms_carrier.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_name</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The carrier name</td>
+</tr>
+<tr>
+<td><code>email_gateway</code></td>
+<td><code>string</code></td>
+<td>
+<em>Optional</em>. The carrier email gateway</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns a sms_carrier object. For an example sms_carrier return object see <a href="#get-a-sms_carrier">Get a SMS carrier</a></p>
+
+<h2>
+<a id="delete-a-sms_carrier" class="anchor" href="#delete-a-sms_carrier" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a sms_carrier</h2>
+
+<pre><code>DELETE /sms_carrier-&lt;sms_carrier_id&gt;
+</code></pre>
+
+<p>Delete a sms_carrier (by id)</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sms_carrier_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Required</strong>. The sms_carrier id to delete</td>
+</tr>
+</tbody>
+</table>
+
+<p>Returns the sms_carrier object that was deleted. For an example sms_carrier return object see <a href="#get-a-sms_carrier">Get a SMS carrier</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Hq-doc maintained by <a href="https://github.com/AdamAtCSD">AdamAtCSD</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
