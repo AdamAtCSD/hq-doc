@@ -215,10 +215,17 @@
 </thead>
 <tbody>
 <tr>
-<td><code>custoer_name</code></td>
+<td><code>customer_name</code></td>
 <td><code>string</code></td>
 <td>
 <strong>Required</strong>. The name of the customer to add. <em>Must be unique</em>
+</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>integer</code></td>
+<td>
+<strong>Optional</strong>. The customer id. <em>Must be in the range 0x10000 and 0xfffff</em> and <em>must be unique</em>
 </td>
 </tr>
 <tr>
@@ -247,7 +254,7 @@
         "mgmt_app_ip": null,
         "idle_timeout": 1000,
         "mgmt_app_port": null,
-        "customer_id": 2,
+        "customer_id": 65834,
         "customer_name": "testing.com"
     }</p>
 
@@ -282,11 +289,11 @@ The following result used a name_match = ^c.*$</p>
 
 <pre><code>[
     {
-        "customer_id": 1,
+        "customer_id": 131072,
         "customer_name": "clearskydata.com"
     },
     {
-        "customer_id": 3,
+        "customer_id": 65537,
         "customer_name": "cars.com"
     }
 ]
@@ -322,7 +329,7 @@ The following result used a name_match = ^c.*$</p>
 
 <pre><code>{
     "customer_name": "xyz.com",
-    "customer_id": 2,
+    "customer_id": 234123,
     "idle_timeout": 1234,
     "mgmt_app_ip": null,
     "mgmt_app_port": null,
@@ -671,7 +678,7 @@ be used to create new sessions (login)</p>
     "role_id": 1,
     "billing_usage": "read",
     "storage_alerts": "modify",
-    "customer_id": 1,
+    "customer_id": 534111,
     "email": "foo@xyz.com",
     "storage_charts": "read",
     "idle_timeout": 900,
@@ -1573,7 +1580,7 @@ customers.</p>
 
 <pre><code>{
     "role_id": 5,
-    "customer_id": 3,
+    "customer_id": 68999,
     "user_id": 1,
     "access_id": 4
 }
@@ -1614,19 +1621,19 @@ customers.</p>
 <pre><code>[
     {
         "role_id": 5,
-        "customer_id": 1,
+        "customer_id": 917504,
         "user_id": 1,
         "access_id": 1
     },
     {
         "role_id": 4,
-        "customer_id": 1,
+        "customer_id": 917504,
         "user_id": 2,
         "access_id": 2
     },
     {
         "role_id": 2,
-        "customer_id": 3,
+        "customer_id": 589824,
         "user_id": 1,
         "access_id": 4
     }
@@ -1662,7 +1669,7 @@ customers.</p>
 <p>an access object. For example:
     {
         "role_id": 5,
-        "customer_id": 1,
+        "customer_id": 589824,
         "user_id": 2,
         "access_id": 2
     }</p>
@@ -1863,7 +1870,7 @@ customers.</p>
                 "idle_timeout": 3600,
                 "access_id": 1,
                 "mgmt_app_port": null,
-                "customer_id": 1,
+                "customer_id": 589824,
                 "customer_name": "clearskydata.com"
             },
             {
@@ -1874,7 +1881,7 @@ customers.</p>
                 "idle_timeout": 1234,
                 "access_id": 4,
                 "mgmt_app_port": null,
-                "customer_id": 3,
+                "customer_id": 589824,
                 "customer_name": "cars.com"
             }
         ],
@@ -1932,7 +1939,7 @@ customers.</p>
     "password_expires_at": null,
     "billing_usage": "read",
     "storage_alerts": "modify",
-    "customer_id": 3,
+    "customer_id": 589824,
     "email": "tuser@clearskydata.com",
     "storage_charts": "read",
     "logged_out_at": null,
@@ -1999,7 +2006,7 @@ customers.</p>
     "password_expires_at": null,
     "billing_usage": "no_access",
     "storage_alerts": "no_access",
-    "customer_id": 2,
+    "customer_id": 589824,
     "email": "foo@xyz.com",
     "storage_charts": "no_access",
     "logged_out_at": null,
@@ -2107,7 +2114,7 @@ customers.</p>
     "password_expires_at": null,
     "billing_usage": "no_access",
     "storage_alerts": "no_access",
-    "customer_id": 2,
+    "customer_id": 589824,
     "email": "foo@xyz.com",
     "storage_charts": "no_access",
     "logged_out_at": null,
@@ -2222,7 +2229,7 @@ down session record</p>
         "user_state": "verified",
         "role_id": 6,
         "password_expires_at": null,
-        "customer_id": 2,
+        "customer_id": 917504,
         "email": "foo@xyz.com",
         "logged_out_at": null,
         "idle_timeout": 1000,
@@ -2281,7 +2288,7 @@ down session record</p>
     "password_expires_at": null,
     "billing_usage": "read",
     "storage_alerts": "modify",
-    "customer_id": 1,
+    "customer_id": 917504,
     "email": "tuser@clearskydata.com",
     "storage_charts": "read",
     "logged_out_at": null,
