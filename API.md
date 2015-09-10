@@ -75,7 +75,8 @@ This method creates a customer.
 
 Parameter | Type    | Description
 -------------|---------|-----------------------------------------------
-`custoer_name` | `string`| **Required**. The name of the customer to add. *Must be unique*
+`customer_name` | `string`| **Required**. The name of the customer to add. *Must be unique*
+`customer_id` | `integer`| **Optional**. The customer id. *Must be in the range 0x10000 and 0xfffff* and *must be unique*
 `idle_timeout` | `integer` | *Optional*. Session timeout in seconds. Default is 15 minutes (900 seconds)
 `mgmt_app_ip`   | `string`| *Optional*. The IPv4 address of the management appliance
 `mgmt_app_port`   | `integer`| *Optional*. The IPv4 port of the managment appliance
@@ -85,7 +86,7 @@ This method returns a new domain object. For example:
         "mgmt_app_ip": null,
         "idle_timeout": 1000,
         "mgmt_app_port": null,
-        "customer_id": 2,
+        "customer_id": 65834,
         "customer_name": "testing.com"
     }
 
@@ -104,11 +105,11 @@ The following result used a name_match = ^c.*$
 
     [
         {
-            "customer_id": 1,
+            "customer_id": 131072,
             "customer_name": "clearskydata.com"
         },
         {
-            "customer_id": 3,
+            "customer_id": 65537,
             "customer_name": "cars.com"
         }
     ]
@@ -127,7 +128,7 @@ Returns a customer object. For example:
 
     {
         "customer_name": "xyz.com",
-        "customer_id": 2,
+        "customer_id": 234123,
         "idle_timeout": 1234,
         "mgmt_app_ip": null,
         "mgmt_app_port": null,
@@ -270,7 +271,7 @@ This method returns a validated object replete with role information. *NOTE:* no
         "role_id": 1,
         "billing_usage": "read",
         "storage_alerts": "modify",
-        "customer_id": 1,
+        "customer_id": 534111,
         "email": "foo@xyz.com",
         "storage_charts": "read",
         "idle_timeout": 900,
@@ -625,7 +626,7 @@ Parameter         | Type    | Description
 
     {
         "role_id": 5,
-        "customer_id": 3,
+        "customer_id": 68999,
         "user_id": 1,
         "access_id": 4
     }
@@ -644,19 +645,19 @@ Parameter         | Type    | Description
     [
         {
             "role_id": 5,
-            "customer_id": 1,
+            "customer_id": 917504,
             "user_id": 1,
             "access_id": 1
         },
         {
             "role_id": 4,
-            "customer_id": 1,
+            "customer_id": 917504,
             "user_id": 2,
             "access_id": 2
         },
         {
             "role_id": 2,
-            "customer_id": 3,
+            "customer_id": 589824,
             "user_id": 1,
             "access_id": 4
         }
@@ -675,7 +676,7 @@ Parameter  | Type    | Description
 an access object. For example:
     {
         "role_id": 5,
-        "customer_id": 1,
+        "customer_id": 589824,
         "user_id": 2,
         "access_id": 2
     }
@@ -768,7 +769,7 @@ For a session that presents multiple customers, you get:
                 "idle_timeout": 3600,
                 "access_id": 1,
                 "mgmt_app_port": null,
-                "customer_id": 1,
+                "customer_id": 589824,
                 "customer_name": "clearskydata.com"
             },
             {
@@ -779,7 +780,7 @@ For a session that presents multiple customers, you get:
                 "idle_timeout": 1234,
                 "access_id": 4,
                 "mgmt_app_port": null,
-                "customer_id": 3,
+                "customer_id": 589824,
                 "customer_name": "cars.com"
             }
         ],
@@ -821,7 +822,7 @@ This method returns an existing session - exactly like an active session (see [S
         "password_expires_at": null,
         "billing_usage": "read",
         "storage_alerts": "modify",
-        "customer_id": 3,
+        "customer_id": 589824,
         "email": "tuser@clearskydata.com",
         "storage_charts": "read",
         "logged_out_at": null,
@@ -873,7 +874,7 @@ The result of the verification is a session object. The state will either be set
         "password_expires_at": null,
         "billing_usage": "no_access",
         "storage_alerts": "no_access",
-        "customer_id": 2,
+        "customer_id": 589824,
         "email": "foo@xyz.com",
         "storage_charts": "no_access",
         "logged_out_at": null,
@@ -948,7 +949,7 @@ The session object is returned. All fields are fetched from the database and the
         "password_expires_at": null,
         "billing_usage": "no_access",
         "storage_alerts": "no_access",
-        "customer_id": 2,
+        "customer_id": 589824,
         "email": "foo@xyz.com",
         "storage_charts": "no_access",
         "logged_out_at": null,
@@ -1033,7 +1034,7 @@ Returns a list of matching sessions - this used a customer_id argument of 2.
             "user_state": "verified",
             "role_id": 6,
             "password_expires_at": null,
-            "customer_id": 2,
+            "customer_id": 917504,
             "email": "foo@xyz.com",
             "logged_out_at": null,
             "idle_timeout": 1000,
@@ -1075,7 +1076,7 @@ A session object. For example:
         "password_expires_at": null,
         "billing_usage": "read",
         "storage_alerts": "modify",
-        "customer_id": 1,
+        "customer_id": 917504,
         "email": "tuser@clearskydata.com",
         "storage_charts": "read",
         "logged_out_at": null,
